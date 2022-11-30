@@ -1,19 +1,26 @@
-- name: Creates directory
-  file:
-    path: ~/backend_dir
-    state: directory
+- name: install working environment
+  become: true
+  shell: apt install -y nodejs npm tar
 
-- name: Copy folder to host
+- name: install pm2
+  become: true
+  shell: npm install -g pm2
+
+- name: create web directory
+  shell: mkdir -p ~/web
+
+- name: copy artifact
   copy:
-    src: ~/project/backend
-    dest: ~/backend_dir 
+    src: artifact.tar.gz
+    dest: ~/artifact.tar.gz
 
-- name: Executing node
+- name: extract artifact
+  shell: tar -xf ~/artifact.tar.gz -C ~/web
+
+- name: start webserver
   shell: |
-    cd ~/backend_dir/backend
+    cd ~/web
     npm install
-    npm run build
+    pm2 stop default
     pm2 start npm -- start
-- name: Sleep 10s to wait server before smoke-test
-  ansible.builtin.pause:
-    seconds: 10
+    pm2 status
