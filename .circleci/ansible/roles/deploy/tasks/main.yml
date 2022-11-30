@@ -21,7 +21,7 @@
 
 - name: copy artifact
   copy:
-    remote_src: artifact.tar.gz
+    src: artifact.tar.gz
     dest: ~/artifact.tar.gz
 
 - name: extract artifact
