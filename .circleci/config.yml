@@ -254,6 +254,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
+            cat .env
             cat environment.txt
             npm install
             npm run build
